@@ -35,18 +35,17 @@ const LoginForm = () => {
     })
       .then((res) => {
         setIsLoading(false);
-        console.log(res);
 
         if (res.ok) {
           usernameInputRef.current.value = '';
           passwordInputRef.current.value = '';
 
           authCtx.login();
-          console.log(authCtx.isLoggedIn);
-
           history.push('/destinations');
           return;
         } else {
+          authCtx.failedAttemptFunc();
+
           if (res.status === 400) {
             throw new Error('Username or password is wrong!');
           } else {
@@ -76,6 +75,7 @@ const LoginForm = () => {
         </div>
         <div className={classes.actions}>
           {!isLoading && <button>Login</button>}
+
           {isLoading && <p>Sending request...</p>}
         </div>
       </form>
