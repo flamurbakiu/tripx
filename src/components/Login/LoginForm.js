@@ -35,7 +35,6 @@ const LoginForm = () => {
     })
       .then((res) => {
         setIsLoading(false);
-
         console.log(res);
 
         if (res.ok) {
@@ -48,9 +47,11 @@ const LoginForm = () => {
           history.push('/destinations');
           return;
         } else {
-          return res.json().then((data) => {
-            throw new Error(data.error.message);
-          });
+          if (res.status === 400) {
+            throw new Error('Username or password is wrong!');
+          } else {
+            throw new Error('Something went wrong!');
+          }
         }
       })
       .catch((err) => alert(err.message));
